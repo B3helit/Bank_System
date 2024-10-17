@@ -49,14 +49,25 @@ date
 		    $pass = $_POST['password'];
 		   
 		    $result = $con->query("select * from userAccounts where email='$user' AND password='$pass'");
-		    if($result->num_rows>0)
+
+		    if($result->num_rows>0) // entered info is correct
 		    { 
 		      session_start();
 		      $data = $result->fetch_assoc();
 		      $_SESSION['userId']=$data['id'];
-		      $_SESSION['user'] = $data;
-		      header('location:index.php');
-		     }
+		      //$_SESSION['user'] = $data;
+			  
+			  $otp = rand(100000, 999999); // Generate 6-digit OTP
+			  $_SESSION['otp'] = $otp;
+	  
+			  // For demonstration, we'll just display the OTP to the user.
+			  sleep(1);
+			  // Redirect to OTP verification page
+
+			  header('location:verify_otp.php?data=' . urlencode($otp));
+
+		      //header('location:index.php');
+		    }
 		    else
 		    {
 		      $error = "<div class='alert alert-warning text-center rounded-0'>Username or password wrong try again!</div>";
